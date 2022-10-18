@@ -1,16 +1,20 @@
-import React from 'react'
+import React from 'react';
 import logo from "../../images/logo.svg";
 import { useNavigate } from 'react-router-dom';
+import AppLoading from '../organisms/AppLoading';
 
 export default function Home() {
   const navigate = useNavigate();
   const [users, setUsers] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState("");
-
+  const [isLoanding, setIsLoading] = React.useState (true);
   React.useEffect(() => {
     fetch ("https://62c4e487abea8c085a7e022a.mockapi.io/users")
     .then ((response) => response.json())
-    .then ((data) => setUsers(data));
+    .then ((data) => {
+      setUsers(data);
+      setIsLoading (false);
+    });
   }, []);
 
   const handleUserChange = (event) => {
@@ -22,7 +26,9 @@ export default function Home() {
   };
 
 
-  return (
+  return isLoanding ? (
+    <AppLoading />
+  ) : (
     <div className="home center">
     <div className="home__logo">
       <img src={logo} className="responsive" alt="" />
@@ -32,11 +38,11 @@ export default function Home() {
       {users
       .sort((a, b) => a.fn.localeCompare(b.fn)) 
       .map((user) => (
-      <option value={user.id} >{`${user.fn} ${user.ln}`}</option>))}
+      <option key={user.id} value={user.id} >{`${user.fn} ${user.ln}`}</option>))}
     </select>
     {!!currentUser && (
     <button onClick={handleConfirmClick} className="button-primary">Entrar</button>)}
     
   </div>
-  )
-}
+  );
+};

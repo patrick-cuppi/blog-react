@@ -8,6 +8,7 @@ export default function Home() {
   const [users, setUsers] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState("");
   const [isLoanding, setIsLoading] = React.useState (true);
+  
   React.useEffect(() => {
     fetch ("https://62c4e487abea8c085a7e022a.mockapi.io/users")
     .then ((response) => response.json())
